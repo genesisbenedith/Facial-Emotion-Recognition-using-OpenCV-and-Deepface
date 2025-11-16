@@ -4,7 +4,8 @@ import soundfile as sf
 import numpy as np
 import subprocess
 from deepface import DeepFace
-import threading
+from openai import OpenAI
+import os
 
 # ------------------------
 # Audio Recording Settings
@@ -46,6 +47,7 @@ def stop_audio_stream():
 # ------------------------
 VIDEO_FILENAME = "video_temp.mp4"
 FINAL_FILENAME = "emotion_with_audio_mac_fixed.mp4"
+TRANSCRIPT_FILENAME = "transcript.txt"
 
 fps = 20.0
 frame_width = 640
@@ -58,7 +60,24 @@ video_out = cv2.VideoWriter(VIDEO_FILENAME, fourcc, fps, (frame_width, frame_hei
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 # ------------------------
-# Start Audio
+# Transcription Function
+# ------------------------
+def transcribe_audio(audio_file_name: str, api_key: str) -> str:
+    """
+    Transcribe audio file to text using GPT-4o Whisper model.
+    """
+    client = OpenAI(api_key=api_key)
+
+    with open(audio_file_name, "rb") as audio_file:
+        transcript = client.audio.transcriptions.create(
+            model="gpt-4o-transcribe",
+            file=audio_file
+        )
+    
+    return transcript.text
+
+# ------------------------
+# Start Audio Stream
 # ------------------------
 start_audio_stream()
 
@@ -101,7 +120,7 @@ while True:
         break
 
 # ------------------------
-# Stop All Streams
+# Stop Recording
 # ------------------------
 cap.release()
 video_out.release()
@@ -138,4 +157,21 @@ subprocess.call([
     FINAL_FILENAME
 ])
 
-print(f"Done! Final file saved as: {FINAL_FILENAME}")
+print(f"Video ready: {FINAL_FILENAME}")
+
+# ------------------------
+# Generate Transcript
+# ------------------------
+print("Generating transcript...")
+
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("Error: OPENAI_API_KEY environment variable not set.")
+
+transcript_text = transcribe_audio(AUDIO_FILENAME, api_key)
+
+with open(TRANSCRIPT_FILENAME, "w") as f:
+    f.write(transcript_text)
+
+print(f"Transcript saved to: {TRANSCRIPT_FILENAME}")
+print("All done 🎉")
