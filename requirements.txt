@@ -1,3 +1,23 @@
 opencv-python
 deepface
-tf_keras
+numpy
+scipy
+sounddevice
+soundfile
+openai
+
+# 📌 Pinned Versions
+opencv-python==4.10.0.84
+deepface==0.0.93
+numpy==1.26.4
+scipy==1.11.4
+sounddevice==0.4.6
+soundfile==0.12.1
+openai==1.14.2
+tensorflow==2.17.0
+retina-face==0.0.13
+mtcnn==0.1.1
+Pillow==10.2.0
+
+# On macOS
+brew install ffmpeg
