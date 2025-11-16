@@ -171,10 +171,23 @@ api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("Error: OPENAI_API_KEY environment variable not set.")
 
+# Create /transcripts directory if it doesn't exist
+TRANSCRIPT_DIR = "transcripts"
+os.makedirs(TRANSCRIPT_DIR, exist_ok=True)
+
+# Timestamp format: YY-MM-DD_HH-MM
+timestamp = datetime.now().strftime("%y-%m-%d_%H-%M")
+
+# Build full path: transcripts/transcript_YY-MM-DD_HH-MM.txt
+TRANSCRIPT_FILENAME = os.path.join(TRANSCRIPT_DIR, f"transcript_{timestamp}.txt")
+
+# Run transcription
 transcript_text = transcribe_audio(AUDIO_FILENAME, api_key)
 
+# Write file
 with open(TRANSCRIPT_FILENAME, "w") as f:
     f.write(transcript_text)
 
 print(f"Transcript saved to: {TRANSCRIPT_FILENAME}")
 print("All done 🎉")
+
