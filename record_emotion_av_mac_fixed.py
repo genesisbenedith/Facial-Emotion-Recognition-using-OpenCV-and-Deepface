@@ -5,6 +5,7 @@ import numpy as np
 import subprocess
 from deepface import DeepFace
 from openai import OpenAI
+from datetime import datetime
 import os
 
 # ------------------------
@@ -47,7 +48,9 @@ def stop_audio_stream():
 # ------------------------
 VIDEO_FILENAME = "video_temp.mp4"
 FINAL_FILENAME = "emotion_with_audio_mac_fixed.mp4"
-TRANSCRIPT_FILENAME = "transcript.txt"
+# Automatically timestamped transcript filename: YY-MM-DD_HH-MM
+timestamp = datetime.now().strftime("%y-%m-%d_%H-%M")
+TRANSCRIPT_FILENAME = f"transcript_{timestamp}.txt"
 
 fps = 20.0
 frame_width = 640
