@@ -1,0 +1,14 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Python virtual environments
+*.pyenv
+pyvenv.cfg
+
+# Virtual environment directories (common names)
+virtualenv/
+.virtualenv/
