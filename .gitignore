@@ -12,3 +12,8 @@ pyvenv.cfg
 # Virtual environment directories (common names)
 virtualenv/
 .virtualenv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
